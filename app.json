@@ -16,6 +16,14 @@
     "android": {
       "predictiveBackGestureEnabled": false,
       "package": "com.brendow.mysticalc"
-    }
+    },
+    "plugins": [
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Permita que o MystiCalc detecte quando a tela está voltada para baixo."
+        }
+      ]
+    ]
   }
 }

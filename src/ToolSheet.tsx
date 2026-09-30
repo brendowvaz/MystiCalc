@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { appendDecimal, appendDigit, formatResult } from './calculator';
+import { triggerKeyHaptic } from './haptics';
 import { styles } from './styles';
 import { type CalculatorTool, type HistoryItem } from './types';
 
@@ -13,6 +14,7 @@ type ToolSheetProps = {
   onClose: () => void;
   onSelectHistoryItem: (result: string) => void;
   onSelectScientificFunction: (key: string) => void;
+  isKeyboardLocked: boolean;
 };
 
 const scientificKeys = ['sin', 'cos', 'tan', '√', 'x²', 'π'];
@@ -52,7 +54,7 @@ function HistoryPanel({
   );
 }
 
-function ConverterPanel() {
+function ConverterPanel({ isKeyboardLocked }: { isKeyboardLocked: boolean }) {
   const [value, setValue] = useState('1');
   const [unit, setUnit] = useState<LengthUnit>('cm');
 
@@ -61,6 +63,9 @@ function ConverterPanel() {
     unit === 'cm' ? numericValue / 100 : unit === 'km' ? numericValue * 1000 : numericValue;
 
   function pressKey(key: string) {
+    triggerKeyHaptic();
+    if (isKeyboardLocked) return;
+
     setValue((currentValue) => {
       if (key === 'C') return '0';
       if (key === ',') return appendDecimal(currentValue);
@@ -126,6 +131,7 @@ export function ToolSheet({
   onClose,
   onSelectHistoryItem,
   onSelectScientificFunction,
+  isKeyboardLocked,
 }: ToolSheetProps) {
   return (
     <Modal
@@ -150,7 +156,7 @@ export function ToolSheet({
             {activeTool === 'history' && (
               <HistoryPanel history={history} onSelect={onSelectHistoryItem} />
             )}
-            {activeTool === 'converter' && <ConverterPanel />}
+            {activeTool === 'converter' && <ConverterPanel isKeyboardLocked={isKeyboardLocked} />}
             {activeTool === 'scientific' && (
               <ScientificPanel onSelect={onSelectScientificFunction} />
             )}

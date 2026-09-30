@@ -13,12 +13,14 @@ import {
   toggleParenthesis,
   toggleSign,
 } from './src/calculator';
+import { triggerKeyHaptic } from './src/haptics';
 import { hasDrawnGlyph, KeyArtwork } from './src/KeyArtwork';
 import { styles } from './src/styles';
 import { calculatorRows, colors } from './src/theme';
 import { ToolbarIcon, type ToolbarIconName } from './src/ToolbarIcon';
 import { ToolSheet } from './src/ToolSheet';
 import { type CalculatorTool, type HistoryItem } from './src/types';
+import { useFaceDownLock } from './src/useFaceDownLock';
 
 const MAX_HISTORY_ITEMS = 50;
 
@@ -28,6 +30,7 @@ function CalculatorScreen() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [activeTool, setActiveTool] = useState<CalculatorTool>(null);
   const [justEvaluated, setJustEvaluated] = useState(false);
+  const isKeyboardLocked = useFaceDownLock();
 
   const keypadWidth = Math.min(width, 500);
   const keySize = Math.min((keypadWidth - 88) / 4, (height * 0.52 - 32) / 5);
@@ -79,6 +82,9 @@ function CalculatorScreen() {
   }
 
   function pressKey(key: string) {
+    triggerKeyHaptic();
+    if (isKeyboardLocked) return;
+
     if (key === 'C') {
       clearExpression();
       return;
@@ -93,6 +99,9 @@ function CalculatorScreen() {
   }
 
   function applyScientificFunction(key: string) {
+    triggerKeyHaptic();
+    if (isKeyboardLocked) return;
+
     if (key === 'π') {
       setExpression((currentExpression) => {
         const multiplication = currentExpression && /[\d)%]$/.test(currentExpression) ? '×' : '';
@@ -162,6 +171,12 @@ function CalculatorScreen() {
               = {preview}
             </Text>
           )}
+
+          {isKeyboardLocked && (
+            <Text accessibilityRole="alert" style={styles.lockedMessage}>
+              Teclado bloqueado
+            </Text>
+          )}
         </View>
 
         <View style={[styles.toolbar, { maxWidth: keypadWidth }]}>
@@ -171,8 +186,12 @@ function CalculatorScreen() {
               style={[styles.toolbarButton, icon === 'backspace' && styles.backspaceButton]}
               accessibilityRole="button"
               accessibilityLabel={label}
+              accessibilityState={{ disabled: isKeyboardLocked }}
               hitSlop={8}
-              onPress={action}
+              onPress={() => {
+                triggerKeyHaptic();
+                if (!isKeyboardLocked) action();
+              }}
             >
               <ToolbarIcon name={icon} color={icon === 'backspace' ? '#315b25' : colors.muted} />
             </Pressable>
@@ -191,7 +210,13 @@ function CalculatorScreen() {
               ]}
             >
               {row.map((key) => (
-                <CalculatorKey key={key} label={key} size={keySize} onPress={() => pressKey(key)} />
+                <CalculatorKey
+                  key={key}
+                  label={key}
+                  size={keySize}
+                  disabled={isKeyboardLocked}
+                  onPress={() => pressKey(key)}
+                />
               ))}
             </View>
           ))}
@@ -201,6 +226,7 @@ function CalculatorScreen() {
       <ToolSheet
         activeTool={activeTool}
         history={history}
+        isKeyboardLocked={isKeyboardLocked}
         onClose={() => setActiveTool(null)}
         onSelectHistoryItem={selectHistoryItem}
         onSelectScientificFunction={applyScientificFunction}
@@ -212,10 +238,12 @@ function CalculatorScreen() {
 function CalculatorKey({
   label,
   size,
+  disabled,
   onPress,
 }: {
   label: string;
   size: number;
+  disabled: boolean;
   onPress: () => void;
 }) {
   const textColor = label === 'C' ? colors.red : colors.white;
@@ -226,10 +254,12 @@ function CalculatorKey({
       style={({ pressed }) => [
         styles.key,
         { width: size, height: size, borderRadius: size / 2 },
-        pressed && { opacity: 0.78 },
+        disabled && styles.disabledKey,
+        pressed && { opacity: disabled ? 0.35 : 0.78 },
       ]}
       accessibilityRole="button"
       accessibilityLabel={label === '()' ? 'Parênteses' : label}
+      accessibilityState={{ disabled }}
       onPress={onPress}
     >
       <KeyArtwork label={label} size={size} />

@@ -17,6 +17,8 @@
   "dependencies": {
     "@expo/metro-runtime": "~57.0.16",
     "expo": "~57.0.24",
+    "expo-haptics": "~57.0.3",
+    "expo-sensors": "~57.0.3",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",

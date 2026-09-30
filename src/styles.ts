@@ -46,6 +46,12 @@ export const styles = StyleSheet.create({
     fontWeight: '300',
     includeFontPadding: false,
   },
+  lockedMessage: {
+    marginTop: 10,
+    color: colors.red,
+    fontSize: 14,
+    fontWeight: '600',
+  },
   toolbar: {
     width: '100%',
     height: 76,
@@ -80,6 +86,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  disabledKey: {
+    opacity: 0.45,
   },
   keyText: {
     fontWeight: '300',
