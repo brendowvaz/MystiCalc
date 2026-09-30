@@ -12,15 +12,15 @@ import {
   formatResult,
   toggleParenthesis,
   toggleSign,
-} from './src/calculator';
-import { triggerKeyHaptic } from './src/haptics';
-import { hasDrawnGlyph, KeyArtwork } from './src/KeyArtwork';
+} from './src/utils/calculator';
+import { triggerKeyHaptic } from './src/utils/haptics';
+import { hasDrawnGlyph, KeyArtwork } from './src/components/KeyArtwork';
 import { styles } from './src/styles';
 import { calculatorRows, colors } from './src/theme';
-import { ToolbarIcon, type ToolbarIconName } from './src/ToolbarIcon';
-import { ToolSheet } from './src/ToolSheet';
+import { ToolbarIcon, type ToolbarIconName } from './src/components/ToolbarIcon';
+import { ToolSheet } from './src/components/ToolSheet';
 import { type CalculatorTool, type HistoryItem } from './src/types';
-import { useFaceDownLock } from './src/useFaceDownLock';
+import { useFaceDownLock } from './src/hooks/useFaceDownLock';
 
 const MAX_HISTORY_ITEMS = 50;
 

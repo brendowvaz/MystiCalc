@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { appendDecimal, appendDigit, formatResult } from './calculator';
-import { triggerKeyHaptic } from './haptics';
-import { styles } from './styles';
-import { type CalculatorTool, type HistoryItem } from './types';
+import { styles } from '../styles';
+import { type CalculatorTool, type HistoryItem } from '../types';
+import { appendDecimal, appendDigit, formatResult } from '../utils/calculator';
+import { triggerKeyHaptic } from '../utils/haptics';
 
 type LengthUnit = 'cm' | 'm' | 'km';
 
