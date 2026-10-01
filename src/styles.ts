@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
   screen: {
     flex: 1,
     alignItems: 'center',
-    paddingBottom: 14,
     backgroundColor: colors.black,
   },
   display: {
@@ -22,21 +21,31 @@ export const styles = StyleSheet.create({
   },
   expressionLine: {
     width: '100%',
-    minHeight: 54,
+    minHeight: 72,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  expression: {
-    flexShrink: 1,
-    color: colors.white,
+  expressionLeadingSpace: {
+    alignSelf: 'stretch',
+    flex: 1,
+  },
+  expressionCharacterGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  expressionCharacter: {
     fontWeight: '300',
-    textAlign: 'right',
     includeFontPadding: false,
+  },
+  caretSlot: {
+    zIndex: 1,
+    width: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   caret: {
     width: 2,
-    height: 47,
     backgroundColor: colors.caret,
   },
   preview: {
@@ -57,17 +66,12 @@ export const styles = StyleSheet.create({
     height: 76,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 24,
   },
   toolbarButton: {
-    width: 60,
-    height: 62,
+    flex: 1,
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  backspaceButton: {
-    width: 62,
-    marginLeft: 'auto',
   },
   divider: {
     width: '100%',
@@ -75,14 +79,16 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.divider,
   },
   keypad: {
-    marginTop: 30,
-    paddingHorizontal: 20,
+    marginTop: 14,
   },
   keyRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   key: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  keyFace: {
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
